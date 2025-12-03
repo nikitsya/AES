@@ -44,12 +44,13 @@ public class AESUtils {
             throw new IllegalArgumentException("Key size must be a multiple of 8 bits");
         }
 
-        int bytes = bits / 8;
+        // SecureRandom generates cryptographically strong random values
         SecureRandom random = new SecureRandom();
 
-        byte[] key = new byte[bytes];
+        byte[] key = new byte[bits / 8];
         random.nextBytes(key);
 
         return key;
     }
+
 }
