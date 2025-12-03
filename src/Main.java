@@ -4,7 +4,14 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        menu();
+        String text = "text";
+        byte[] key = AESUtils.generateRandomKey();
+        String encrypted_text = AESUtils.encryptOrDecryptAES(text, key, true);
+        String decrypted_text = AESUtils.encryptOrDecryptAES(encrypted_text, key, false);
+        System.out.println("Encrypted: " + encrypted_text);
+        System.out.println("Decrypted: " + decrypted_text);
+
+        // menu();
     }
 
     public static void menu() {

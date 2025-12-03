@@ -7,16 +7,6 @@ import java.util.Base64;
 
 public class AESUtils {
 
-    public static void main(String[] args) {
-        String text = "text";
-        byte[] key = generateRandomKey();
-        String encrypted_text = encryptOrDecryptAES(text, key, true);
-        String decrypted_text = encryptOrDecryptAES(encrypted_text, key, false);
-        System.out.println("Encrypted: " + encrypted_text);
-        System.out.println("Decrypted: " + decrypted_text);
-
-    }
-
     public static String encryptOrDecryptAES(String text, byte[] key, boolean encrypt) {
         try {
             // Create default byte array
