@@ -7,11 +7,11 @@ public class AESUtils {
     public static void main(String[] args) {
 
         String text = "test";
-        String hexText = toHex(text);
-        System.out.println(text + ": " + hexText);
+        byte[] textToBytes = textToBytes(text);
+        System.out.println(text + ": " + Arrays.toString(textToBytes));
 
         byte[] key128 = generateRandomKey(128);
-        System.out.println("128-bit key: " + toHex(Arrays.toString(key128)));
+        System.out.println("128-bit key: " + Arrays.toString(key128));
 
     }
 
@@ -35,12 +35,8 @@ public class AESUtils {
         return null;
     }
 
-    public static String toHex(String text) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : text.getBytes(StandardCharsets.UTF_8)) {
-            sb.append(String.format("%02X", b));
-        }
-        return sb.toString();
+    public static byte[] textToBytes(String text) {
+        return text.getBytes(StandardCharsets.UTF_8);
     }
 
     public static byte[] generateRandomKey(int bits) {
