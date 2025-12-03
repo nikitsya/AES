@@ -37,9 +37,8 @@ public class AESUtils {
     }
 
     public static byte[] generateRandomKey() {
-        SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
-        random.nextBytes(key);
+        new SecureRandom().nextBytes(key);
         return key;
     }
 }
