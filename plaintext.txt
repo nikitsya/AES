@@ -1,0 +1,11 @@
+Personal Data (PD): From Article 4 (Definitions): ‘personal data’ means any information relating to an identified or
+identifiable natural person (‘data subject’); an identifiable natural person is one who can be identified, directly or
+indirectly, in particular by reference to an identifier such as a name, an identification number, location data, an
+online identifier or to one or more factors specific to the physical, physiological, genetic, mental, economic,
+cultural or social identity of that natural person; While there are many items of PD that may be obvious (a name, an
+address, a phone number), others are less immediately obvious. Take for example a website where you collect logs of
+activity on the site, inclusive of the Internet Protocol (IP) address of the site’s visitors. While an IP address on
+its own may not appear to be PD (this would be known as an identifier, or assuming you have not internally mapped an IP
+to a given user, a pseudonymised identifier), there likely exists another database, with an ISP or another website,
+that relates this address to a ‘natural person’ – consequently, the storage of IP addresses does constitute storage of
+PD.
