@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
@@ -10,7 +11,13 @@ public class FileUtils {
         String cipher_text_path = "ciphertext.txt";
         byte[] key = AESUtils.generate16ByteRandomKey();
 
-        System.out.println(getLines(plain_text_path));
+        List<String> lines = getLines(plain_text_path);
+
+        String plain_text = lines.get(3);
+        String cipher_text = AESUtils.encryptOrDecryptAES(plain_text, key, true);
+        System.out.println("Encrypted: " + plain_text);
+        String returned_text = AESUtils.encryptOrDecryptAES(cipher_text, key, false);
+        System.out.println("Plain text: " + returned_text);
     }
 
     public static List<String> getLines(String path) {
