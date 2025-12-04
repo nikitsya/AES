@@ -7,7 +7,7 @@ import java.util.Base64;
 
 public class AESUtils {
 
-    public static String encryptOrDecryptAES(String text, byte[] key, boolean encrypt) {
+    private static String encryptOrDecryptAES(String text, byte[] key, boolean encrypt) {
         try {
             // Create default byte array
             byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -30,6 +30,14 @@ public class AESUtils {
             System.out.println("Error while " + (encrypt ? "encrypting" : "decrypting") + ": " + e);
         }
         return null;
+    }
+
+    public static String encryptAES(String text, byte[] key) {
+        return encryptOrDecryptAES(text, key, true);
+    }
+
+    public static String decryptAES(String text, byte[] key) {
+        return encryptOrDecryptAES(text, key, false);
     }
 
     public static byte[] textToBytes(String text) {
