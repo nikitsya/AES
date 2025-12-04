@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
         String text = "text";
-        byte[] key = AESUtils.generateRandomKey();
+        byte[] key = AESUtils.generate16ByteRandomKey();
         String encrypted_text = AESUtils.encryptOrDecryptAES(text, key, true);
         String decrypted_text = AESUtils.encryptOrDecryptAES(encrypted_text, key, false);
         System.out.println("Encrypted: " + encrypted_text);

@@ -36,7 +36,7 @@ public class AESUtils {
         return text.getBytes(StandardCharsets.UTF_8);
     }
 
-    public static byte[] generateRandomKey() {
+    public static byte[] generate16ByteRandomKey() {
         byte[] key = new byte[16];
         new SecureRandom().nextBytes(key);
         return key;
