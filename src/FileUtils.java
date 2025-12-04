@@ -10,18 +10,17 @@ public class FileUtils {
         String cipher_text_path = "ciphertext.txt";
         byte[] key = AESUtils.generate16ByteRandomKey();
 
-        List<String> lines = getLines(plain_text_path);
+        String content = getFileContent(plain_text_path);
 
-        String plain_text = lines.get(3);
-        String cipher_text = AESUtils.encryptOrDecryptAES(plain_text, key, true);
-        System.out.println("Encrypted: " + plain_text);
+        String cipher_text = AESUtils.encryptOrDecryptAES(content, key, true);
+        System.out.println("Encrypted: " + content);
         String returned_text = AESUtils.encryptOrDecryptAES(cipher_text, key, false);
         System.out.println("Plain text: " + returned_text);
     }
 
-    public static List<String> getLines(String path) {
+    public static String getFileContent(String path) {
         try {
-            return Files.readAllLines(Paths.get(path));
+            return Files.readString(Paths.get(path));
         } catch (IOException e) {
             System.out.println("Error while reading file: " + e);
         }
