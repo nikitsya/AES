@@ -41,13 +41,13 @@ public class Menu {
 
         // FILE NAME INPUT
         System.out.print("Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ");
-        String file_name = getFileName();
+        String file_name = getFileNameFromUser();
 
         // KEY INPUT FOR DECRYPT
         byte[] key = AESUtils.generate16ByteRandomKey();
         if (!encrypt) {
             System.out.print("Enter key (16 characters): ");
-            key = getKeyString().getBytes();
+            key = getKeyFromUser();
         } else {
             System.out.print("Your key (Save to decryption the file!): " + Arrays.toString(key));
         }
@@ -59,7 +59,7 @@ public class Menu {
         user_input.nextLine();
     }
 
-    private static String getFileName() {
+    private static String getFileNameFromUser() {
         String file_name = user_input.nextLine().trim();
 
         while (file_name.isEmpty()) {
@@ -74,14 +74,14 @@ public class Menu {
         return file_name;
     }
 
-    private static String getKeyString() {
+    private static byte[] getKeyFromUser() {
         System.out.print("Enter key (16 characters): ");
         String key_string = user_input.nextLine();
         while (key_string.length() != 16) {
             System.out.println("Key must be exactly 16 characters. Try again.");
             key_string = user_input.nextLine();
         }
-        return key_string;
+        return key_string.getBytes();
     }
 
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
