@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -38,8 +39,6 @@ public class Menu {
         // clear leftover newline
         user_input.nextLine();
 
-        String keyString;
-
         // FILE NAME INPUT
         System.out.print("Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ");
         String file_name = getFileName();
@@ -48,11 +47,7 @@ public class Menu {
         byte[] key = AESUtils.generate16ByteRandomKey();
         if (!encrypt) {
             System.out.print("Enter key (16 characters): ");
-            keyString = user_input.nextLine();
-            while (keyString.length() != 16) {
-                System.out.println("Key must be exactly 16 characters. Try again.");
-                keyString = user_input.nextLine();
-            }
+            key = getKeyString().getBytes();
         } else {
             System.out.print("Your key (Save to decryption the file!): " + Arrays.toString(key));
         }
@@ -90,6 +85,16 @@ public class Menu {
         }
 
         return file_name;
+    }
+
+    private static String getKeyString() {
+        System.out.print("Enter key (16 characters): ");
+        String key_string = user_input.nextLine();
+        while (key_string.length() != 16) {
+            System.out.println("Key must be exactly 16 characters. Try again.");
+            key_string = user_input.nextLine();
+        }
+        return key_string;
     }
 
     private static void printMainMenu() {
