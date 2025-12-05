@@ -66,34 +66,61 @@ public class Menu {
 
     private static String getFileNameFromUser() {
         String file_input_message = "\nEnter file name (format: filename.txt): ";
-        String error_message = "\nFile name cannot be empty. Try again.";
+        String empty_file_name_message = """
+            
+            ---------------------------------------------
+            File name cannot be empty. Try again.
+            ---------------------------------------------""";
+        String file_not_found_message = """
+            
+            ---------------------------------------------
+            File does not exist. Try again.
+            ---------------------------------------------""";
         String file_format = ".txt";
 
-        System.out.print(file_input_message);
-        String file_name = user_input.nextLine().trim();
+        String file_name;
 
-        while (file_name.isEmpty()) {
-            System.out.println(error_message);
+        while (true) {
+            System.out.print(file_input_message);
             file_name = user_input.nextLine().trim();
-        }
 
-        if (!file_name.endsWith(file_format)) {
-            file_name += file_format;
-        }
+            // check empty
+            if (file_name.isEmpty()) {
+                System.out.println(empty_file_name_message);
+                continue;
+            }
 
-        return file_name;
+            // add .txt if missing
+            if (!file_name.endsWith(file_format)) {
+                file_name += file_format;
+            }
+
+            // check existence
+            if (!FileUtils.checkFileExistence(file_name)) {
+                System.out.println(file_not_found_message);
+                continue;
+            }
+
+            // everything OK
+            return file_name;
+        }
     }
 
     private static byte[] getKeyFromUser() {
-        String key_prompt = "\bEnter key (16 characters): ";
-        String error_message = "\bKey must be exactly 16 characters. Try again.";
+        String key_prompt = "\nEnter key (16 characters): ";
+        String error_message = """
+                
+                ---------------------------------------------
+                Key must be exactly 16 characters. Try again.
+                ---------------------------------------------""";
 
         System.out.print(key_prompt);
         String key_string = user_input.nextLine().trim();
 
         while (key_string.length() != 16) {
             System.out.println(error_message);
-            key_string = user_input.nextLine();
+            System.out.print(key_prompt);
+            key_string = user_input.nextLine().trim();
         }
 
         return key_string.getBytes();
