@@ -36,6 +36,20 @@ public class Menu {
         }
     }
 
+    private static void printMainMenu() {
+        System.out.println("""
+            
+            
+            ---------------------------------------------
+            MAIN MENU
+            ---------------------------------------------
+            
+            1. Encrypt a File
+            2. Decrypt a File
+            3. Quit the application
+            """);
+    }
+
     private static void fileMenu(boolean encrypt) {
         String file_input_message = "Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ";
         String return_to_main_menu_message = "Press ENTER to return to main menu...";
@@ -52,20 +66,6 @@ public class Menu {
 
         System.out.println(return_to_main_menu_message);
         user_input.nextLine();
-    }
-
-    private static void printMainMenu() {
-        System.out.println("""
-            
-            
-            ---------------------------------------------
-            MAIN MENU
-            ---------------------------------------------
-            
-            1. Encrypt a File
-            2. Decrypt a File
-            3. Quit the application
-            """);
     }
 
     private static String getFileNameFromUser() {
@@ -117,6 +117,7 @@ public class Menu {
                 result = AESUtils.encryptAES(content, key);
                 FileUtils.writeFile(ciphertext_file_name, result);
                 System.out.print(key_message + Arrays.toString(key));
+                FileUtils.writeFile(key_file_name, AESUtils.bytesToString(key));
             } else {
                 result = AESUtils.decryptAES(content, key);
                 FileUtils.writeFile(plaintext_file_name, result);
