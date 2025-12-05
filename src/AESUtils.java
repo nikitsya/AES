@@ -45,7 +45,7 @@ public class AESUtils {
     }
 
     public static String bytesToString(byte[] bytes) {
-        return new String(bytes);
+        return new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
     }
 
     public static byte[] generate16ByteRandomKey() {
