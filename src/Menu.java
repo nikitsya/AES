@@ -106,7 +106,7 @@ public class Menu {
         String key_file_name = "key.txt";
 
         String error_message = "\nError while processing file: ";
-        String result_message = "\nYour key and result will be saved here: " + key_file_name + " " +
+        String result_message = "\nYour key and result will be saved here: " + key_file_name + ", " +
                 (encrypt ? ciphertext_file_name : plaintext_file_name);
 
         try {
