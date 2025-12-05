@@ -9,7 +9,7 @@ public class Menu {
     public static void start_program() {
         String write_number_message = "Write a number (1-3): ";
         String invalid_input_message = "\nInvalid input. Please try again.";
-        String exit_message = "Exiting...";
+        String exit_message = "\nExiting...";
 
         while (true) {
             printMainMenu();
@@ -55,7 +55,7 @@ public class Menu {
         // clear leftover newline
         skipLine();
 
-        String file_name = getFileNameFromUser(encrypt);
+        String file_name = getFileNameFromUser();
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
 
         process_file(file_name,key,encrypt);
@@ -64,8 +64,8 @@ public class Menu {
         skipLine();
     }
 
-    private static String getFileNameFromUser(boolean encrypt) {
-        String file_input_message = "\nEnter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ";
+    private static String getFileNameFromUser() {
+        String file_input_message = "\nEnter file name (format: filename.txt): ";
         String error_message = "\nFile name cannot be empty. Try again.";
         String file_format = ".txt";
 
