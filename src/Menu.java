@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -37,19 +38,11 @@ public class Menu {
         // clear leftover newline
         user_input.nextLine();
 
-        String fileName;
         String keyString;
 
         // FILE NAME INPUT
         System.out.print("Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ");
-        fileName = user_input.nextLine().trim();
-        while (fileName.isEmpty()) {
-            System.out.print("File name cannot be empty. Try again: ");
-            fileName = user_input.nextLine().trim();
-        }
-        if (!fileName.endsWith(".txt")) {
-            fileName += ".txt";
-        }
+        String file_name = getFileName();
 
         // KEY INPUT FOR DECRYPT
         byte[] key = AESUtils.generate16ByteRandomKey();
@@ -57,14 +50,16 @@ public class Menu {
             System.out.print("Enter key (16 characters): ");
             keyString = user_input.nextLine();
             while (keyString.length() != 16) {
-                System.out.print("Key must be exactly 16 characters. Try again: ");
+                System.out.println("Key must be exactly 16 characters. Try again.");
                 keyString = user_input.nextLine();
             }
+        } else {
+            System.out.print("Your key (Save to decryption the file!): " + Arrays.toString(key));
         }
 
         // PROCESS THE FILE
         try {
-            String content = FileUtils.getFileContent(fileName);
+            String content = FileUtils.getFileContent(file_name);
             String result;
             if (encrypt) {
                 result = AESUtils.encryptAES(content, key);
@@ -80,6 +75,21 @@ public class Menu {
 
         System.out.println("Press ENTER to return to main menu...");
         user_input.nextLine();
+    }
+
+    private static String getFileName() {
+        String file_name = user_input.nextLine().trim();
+
+        while (file_name.isEmpty()) {
+            System.out.println("File name cannot be empty. Try again.");
+            file_name = user_input.nextLine().trim();
+        }
+
+        if (!file_name.endsWith(".txt")) {
+            file_name += ".txt";
+        }
+
+        return file_name;
     }
 
     private static void printMainMenu() {
