@@ -6,10 +6,6 @@ import java.nio.file.Paths;
 public class FileUtils {
 
     public static String getFileContent(String path) {
-        if (!checkFileExistence(path)) {
-            System.out.println("Error: File does not exist.");
-            return null;
-        }
         try {
             return Files.readString(Paths.get(path));
         } catch (IOException e) {

@@ -127,26 +127,32 @@ public class Menu {
     }
 
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
-        String plaintext_file_name = "plaintext.txt";
-        String ciphertext_file_name = "ciphertext.txt";
+        String plaintext_file_name = "decrypted_text.txt";
+        String ciphertext_file_name = "encrypted_text.txt";
         String key_file_name = "key.txt";
 
         String error_message = "\nError while processing file: ";
-        String result_message = "\nYour key and result will be saved here: " + key_file_name + ", " +
-                (encrypt ? ciphertext_file_name : plaintext_file_name);
+        String result_message = "\nYour result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
+        String key_store_message = "\nSee your key in the " + key_file_name;
 
         try {
-            String content = FileUtils.getFileContent(file_name);
-            String result;
-            if (encrypt) {
-                result = AESUtils.encryptAES(content, key);
-                FileUtils.writeFile(ciphertext_file_name, result);
-                FileUtils.writeFile(key_file_name, AESUtils.bytesToString(key));
-            } else {
-                result = AESUtils.decryptAES(content, key);
-                FileUtils.writeFile(plaintext_file_name, result);
+            while (true) {
+                String content = FileUtils.getFileContent(file_name);
+                String file_name_to_write = encrypt ? ciphertext_file_name : plaintext_file_name;
+                String content_to_write;
+                try {
+                    content_to_write = encrypt ? AESUtils.encryptAES(content, key) : AESUtils.decryptAES(content, key);
+                } catch (Exception e) {
+                    continue;
+                }
+                FileUtils.writeFile(file_name_to_write, content_to_write);
+                if (encrypt) {
+                    FileUtils.writeFile(key_file_name, AESUtils.bytesToString(key));
+                    result_message += key_store_message;
+                }
+                System.out.println(result_message);
+                break;
             }
-            System.out.println(result_message);
         } catch (Exception e) {
             System.out.println(error_message + e.getMessage());
         }
