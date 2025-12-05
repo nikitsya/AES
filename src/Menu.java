@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -51,14 +50,12 @@ public class Menu {
     }
 
     private static void fileMenu(boolean encrypt) {
-        String file_input_message = "Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ";
-        String return_to_main_menu_message = "Press ENTER to return to main menu...";
+        String return_to_main_menu_message = "\nPress ENTER to return to main menu...";
 
         // clear leftover newline
         user_input.nextLine();
 
-        System.out.print(file_input_message);
-        String file_name = getFileNameFromUser();
+        String file_name = getFileNameFromUser(encrypt);
 
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
 
@@ -68,10 +65,12 @@ public class Menu {
         user_input.nextLine();
     }
 
-    private static String getFileNameFromUser() {
-        String error_message = "File name cannot be empty. Try again.";
+    private static String getFileNameFromUser(boolean encrypt) {
+        String file_input_message = "\nEnter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ";
+        String error_message = "\nFile name cannot be empty. Try again.";
         String file_format = ".txt";
 
+        System.out.print(file_input_message);
         String file_name = user_input.nextLine().trim();
 
         while (file_name.isEmpty()) {
@@ -87,8 +86,8 @@ public class Menu {
     }
 
     private static byte[] getKeyFromUser() {
-        String error_message = "Key must be exactly 16 characters. Try again.";
-        String key_prompt = "Enter key (16 characters): ";
+        String key_prompt = "\bEnter key (16 characters): ";
+        String error_message = "\bKey must be exactly 16 characters. Try again.";
 
         System.out.print(key_prompt);
         String key_string = user_input.nextLine().trim();
@@ -106,9 +105,9 @@ public class Menu {
         String ciphertext_file_name = "ciphertext.txt";
         String key_file_name = "key.txt";
 
-        String error_message = "Error while processing file: ";
-        String key_message = "Your result will be saved here: " + key_file_name;
-        String result_message = "Your result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
+        String error_message = "\nError while processing file: ";
+        String result_message = "\nYour key and result will be saved here: " + key_file_name + " " +
+                (encrypt ? ciphertext_file_name : plaintext_file_name);
 
         try {
             String content = FileUtils.getFileContent(file_name);
@@ -116,7 +115,6 @@ public class Menu {
             if (encrypt) {
                 result = AESUtils.encryptAES(content, key);
                 FileUtils.writeFile(ciphertext_file_name, result);
-                System.out.print(key_message + Arrays.toString(key));
                 FileUtils.writeFile(key_file_name, AESUtils.bytesToString(key));
             } else {
                 result = AESUtils.decryptAES(content, key);
