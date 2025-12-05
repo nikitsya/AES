@@ -7,6 +7,14 @@ import java.util.Base64;
 
 public class AESUtils {
 
+    public static String encryptAES(String text, byte[] key) {
+        return encryptOrDecryptAES(text, key, true);
+    }
+
+    public static String decryptAES(String text, byte[] key) {
+        return encryptOrDecryptAES(text, key, false);
+    }
+
     private static String encryptOrDecryptAES(String text, byte[] key, boolean encrypt) {
         try {
             // Create default byte array
@@ -32,16 +40,12 @@ public class AESUtils {
         return null;
     }
 
-    public static String encryptAES(String text, byte[] key) {
-        return encryptOrDecryptAES(text, key, true);
-    }
-
-    public static String decryptAES(String text, byte[] key) {
-        return encryptOrDecryptAES(text, key, false);
-    }
-
     public static byte[] textToBytes(String text) {
         return text.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public static String bytesToString(byte[] bytes) {
+        return new String(bytes);
     }
 
     public static byte[] generate16ByteRandomKey() {
