@@ -9,7 +9,7 @@ public class FileUtils {
         try {
             return Files.readString(Paths.get(path));
         } catch (IOException e) {
-            System.out.println("Error while reading file: " + e);
+            System.out.println("\nError while reading file: " + e);
         }
         return null;
     }
@@ -18,7 +18,7 @@ public class FileUtils {
         try {
             Files.write(Paths.get(path), content.getBytes());
         } catch (IOException e) {
-            System.out.println("Error while writing file: " + e);
+            System.out.println("\nError while writing file: " + e);
         }
     }
 }
