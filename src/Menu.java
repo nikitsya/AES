@@ -127,8 +127,8 @@ public class Menu {
     }
 
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
-        String plaintext_file_name = "decrypted_text.txt";
-        String ciphertext_file_name = "encrypted_text.txt";
+        String plaintext_file_name = "plaintext.txt";
+        String ciphertext_file_name = "ciphertext.txt";
         String key_file_name = "key.txt";
 
         String error_message = "\nError while processing file: ";
@@ -161,5 +161,4 @@ public class Menu {
     private static void skipLine() {
         user_input.nextLine();
     }
-
 }
