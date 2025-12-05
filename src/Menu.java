@@ -53,20 +53,7 @@ public class Menu {
         }
 
         // PROCESS THE FILE
-        try {
-            String content = FileUtils.getFileContent(file_name);
-            String result;
-            if (encrypt) {
-                result = AESUtils.encryptAES(content, key);
-                FileUtils.writeFile("ciphertext.txt", result);
-            } else {
-                result = AESUtils.decryptAES(content, key);
-                FileUtils.writeFile("plaintext.txt", result);
-            }
-            System.out.println("Your result will be saved here: " + (encrypt ? "ciphertext.txt" : "plaintext.txt"));
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        process_file(file_name,key,encrypt);
 
         System.out.println("Press ENTER to return to main menu...");
         user_input.nextLine();
@@ -95,6 +82,23 @@ public class Menu {
             key_string = user_input.nextLine();
         }
         return key_string;
+    }
+
+    private static void process_file(String file_name, byte[] key, boolean encrypt) {
+        try {
+            String content = FileUtils.getFileContent(file_name);
+            String result;
+            if (encrypt) {
+                result = AESUtils.encryptAES(content, key);
+                FileUtils.writeFile("ciphertext.txt", result);
+            } else {
+                result = AESUtils.decryptAES(content, key);
+                FileUtils.writeFile("plaintext.txt", result);
+            }
+            System.out.println("Your result will be saved here: " + (encrypt ? "ciphertext.txt" : "plaintext.txt"));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private static void printMainMenu() {
