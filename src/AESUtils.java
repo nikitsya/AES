@@ -86,16 +86,6 @@ public class AESUtils {
     }
 
     /**
-     * Converts a UTF-8 byte array into a readable String.
-     *
-     * @param bytes the byte array to convert
-     * @return the resulting UTF-8 string
-     */
-    public static String bytesToString(byte[] bytes) {
-        return new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-    }
-
-    /**
      * Generates a secure random 16-byte AES key.
      *
      * @return a random 16-byte array suitable for AES-128
@@ -104,5 +94,38 @@ public class AESUtils {
         byte[] key = new byte[16];
         new SecureRandom().nextBytes(key);
         return key;
+    }
+
+    /**
+     * Encodes a byte array into a Base64 string.
+     *
+     * @param key the AES key as a byte array
+     * @return Base64-encoded string representation of the key
+     */
+    public static String encodeKeyToBase64(byte[] key) {
+        return Base64.getEncoder().encodeToString(key);
+    }
+
+    /**
+     * Converts a Base64-encoded string back into a 16-byte AES key.
+     *
+     * @param base64Key Base64 string entered by the user
+     * @return decoded 16-byte key, or null if invalid
+     */
+    public static byte[] decodeBase64Key(String base64Key) {
+        try {
+            byte[] key = Base64.getDecoder().decode(base64Key);
+
+            if (key.length != 16) {
+                System.out.println("Invalid key length. Must decode to 16 bytes.");
+                return null;
+            }
+
+            return key;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid Base64 key format.");
+            return null;
+        }
     }
 }
