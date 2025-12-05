@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -129,30 +130,18 @@ public class Menu {
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
         String plaintext_file_name = "plaintext.txt";
         String ciphertext_file_name = "ciphertext.txt";
-        String key_file_name = "key.txt";
 
         String error_message = "\nError while processing file: ";
+        String key_message = "Your key (save to decrypt the file!): ";
         String result_message = "\nYour result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
-        String key_store_message = "\nSee your key in the " + key_file_name;
 
         try {
-            while (true) {
-                String content = FileUtils.getFileContent(file_name);
-                String file_name_to_write = encrypt ? ciphertext_file_name : plaintext_file_name;
-                String content_to_write;
-                try {
-                    content_to_write = encrypt ? AESUtils.encryptAES(content, key) : AESUtils.decryptAES(content, key);
-                } catch (Exception e) {
-                    continue;
-                }
-                FileUtils.writeFile(file_name_to_write, content_to_write);
-                if (encrypt) {
-                    FileUtils.writeFile(key_file_name, AESUtils.bytesToString(key));
-                    result_message += key_store_message;
-                }
-                System.out.println(result_message);
-                break;
-            }
+            String content = FileUtils.getFileContent(file_name);
+            String file_name_to_write = encrypt ? ciphertext_file_name : plaintext_file_name;
+            String content_to_write = encrypt ? AESUtils.encryptAES(content, key) : AESUtils.decryptAES(content, key);
+            FileUtils.writeFile(file_name_to_write, content_to_write);
+            System.out.println(key_message + Arrays.toString(key));
+            System.out.println(result_message);
         } catch (Exception e) {
             System.out.println(error_message + e.getMessage());
         }
