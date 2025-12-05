@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private static Scanner user_input = new Scanner(System.in);
+    private static final Scanner user_input = new Scanner(System.in);
     private static final String invalid_input_message = "Invalid input. Please try again.";
     private static final String write_number_message = "Write a number (1-3): ";
 
-    public static void menu() {
+    public static void start_program() {
         while (true) {
             printMainMenu();
             try {
@@ -16,9 +16,9 @@ public class Menu {
                 int choice = user_input.nextInt();
 
                 if (choice == 1) {
-                    // TODO
+                    fileMenu(true);
                 } else if (choice == 2) {
-                    // TODO
+                    fileMenu(false);
                 } else if (choice == 3) {
                     System.out.println("Exiting...");
                     break;
@@ -31,6 +31,55 @@ public class Menu {
                 user_input.nextLine();
             }
         }
+    }
+
+    private static void fileMenu(boolean encrypt) {
+        // clear leftover newline
+        user_input.nextLine();
+
+        String fileName;
+        String keyString;
+
+        // FILE NAME INPUT
+        System.out.print("Enter file name to " + (encrypt ? "encrypt" : "decrypt") + " (format: filename.txt): ");
+        fileName = user_input.nextLine().trim();
+        while (fileName.isEmpty()) {
+            System.out.print("File name cannot be empty. Try again: ");
+            fileName = user_input.nextLine().trim();
+        }
+        if (!fileName.endsWith(".txt")) {
+            fileName += ".txt";
+        }
+
+        // KEY INPUT FOR DECRYPT
+        byte[] key = AESUtils.generate16ByteRandomKey();
+        if (!encrypt) {
+            System.out.print("Enter key (16 characters): ");
+            keyString = user_input.nextLine();
+            while (keyString.length() != 16) {
+                System.out.print("Key must be exactly 16 characters. Try again: ");
+                keyString = user_input.nextLine();
+            }
+        }
+
+        // PROCESS THE FILE
+        try {
+            String content = FileUtils.getFileContent(fileName);
+            String result;
+            if (encrypt) {
+                result = AESUtils.encryptAES(content, key);
+                FileUtils.writeFile("ciphertext.txt", result);
+            } else {
+                result = AESUtils.decryptAES(content, key);
+                FileUtils.writeFile("plaintext.txt", result);
+            }
+            System.out.println("Your result will be saved here: " + (encrypt ? "ciphertext.txt" : "plaintext.txt"));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("Press ENTER to return to main menu...");
+        user_input.nextLine();
     }
 
     private static void printMainMenu() {
