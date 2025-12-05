@@ -7,8 +7,8 @@ public class Menu {
     private static final Scanner user_input = new Scanner(System.in);
 
     public static void start_program() {
-        String invalid_input_message = "Invalid input. Please try again.";
         String write_number_message = "Write a number (1-3): ";
+        String invalid_input_message = "\nInvalid input. Please try again.";
         String exit_message = "Exiting...";
 
         while (true) {
@@ -30,7 +30,7 @@ public class Menu {
 
             } catch (InputMismatchException e) {
                 System.out.println(invalid_input_message);
-                user_input.nextLine();
+                skipLine();
             }
         }
     }
@@ -53,16 +53,15 @@ public class Menu {
         String return_to_main_menu_message = "\nPress ENTER to return to main menu...";
 
         // clear leftover newline
-        user_input.nextLine();
+        skipLine();
 
         String file_name = getFileNameFromUser(encrypt);
-
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
 
         process_file(file_name,key,encrypt);
 
         System.out.println(return_to_main_menu_message);
-        user_input.nextLine();
+        skipLine();
     }
 
     private static String getFileNameFromUser(boolean encrypt) {
@@ -125,4 +124,9 @@ public class Menu {
             System.out.println(error_message + e.getMessage());
         }
     }
+
+    private static void skipLine() {
+        user_input.nextLine();
+    }
+
 }
