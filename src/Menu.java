@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -108,23 +107,12 @@ public class Menu {
     }
 
     private static byte[] getKeyFromUser() {
-        String key_prompt = "\nEnter key (16 characters): ";
-        String error_message = """
-                
-                ---------------------------------------------
-                Key must be exactly 16 characters. Try again.
-                ---------------------------------------------""";
+        String key_prompt = "\nEnter key: ";
 
         System.out.print(key_prompt);
         String key_string = user_input.nextLine().trim();
 
-        while (key_string.length() != 16) {
-            System.out.println(error_message);
-            System.out.print(key_prompt);
-            key_string = user_input.nextLine().trim();
-        }
-
-        return key_string.getBytes();
+        return AESUtils.decodeBase64Key(key_string);
     }
 
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
@@ -132,15 +120,17 @@ public class Menu {
         String ciphertext_file_name = "ciphertext.txt";
 
         String error_message = "\nError while processing file: ";
-        String key_message = "Your key (save to decrypt the file!): ";
-        String result_message = "\nYour result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
+        String key_message = "\nYour key (save to decrypt the file!): ";
+        String result_message = "Your result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
 
         try {
             String content = FileUtils.getFileContent(file_name);
             String file_name_to_write = encrypt ? ciphertext_file_name : plaintext_file_name;
             String content_to_write = encrypt ? AESUtils.encryptAES(content, key) : AESUtils.decryptAES(content, key);
             FileUtils.writeFile(file_name_to_write, content_to_write);
-            System.out.println(key_message + Arrays.toString(key));
+            if (encrypt) {
+                System.out.println(key_message + AESUtils.encodeKeyToBase64(key));
+            }
             System.out.println(result_message);
         } catch (Exception e) {
             System.out.println(error_message + e.getMessage());
