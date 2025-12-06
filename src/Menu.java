@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -15,7 +14,8 @@ public class Menu {
             printMainMenu();
             try {
                 System.out.print(write_number_message);
-                int choice = user_input.nextInt();
+                String line = user_input.nextLine().trim();
+                int choice = Integer.parseInt(line);
 
                 if (choice == 1) {
                     fileMenu(true);
@@ -28,9 +28,8 @@ public class Menu {
                     System.out.println(invalid_input_message);
                 }
 
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println(invalid_input_message);
-                skipLine();
             }
         }
     }
