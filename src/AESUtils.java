@@ -6,7 +6,6 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 
-
 /**
  * Utility class for AES encryption and decryption using CBC mode with PKCS5 padding.
  * Provides helper methods for converting text to bytes, generating keys,
