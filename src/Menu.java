@@ -116,6 +116,9 @@ public class Menu {
     }
 
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
+        if (key == null) {
+            return;
+        }
         String plaintext_file_name = "plaintext.txt";
         String ciphertext_file_name = "ciphertext.txt";
 
