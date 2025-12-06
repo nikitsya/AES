@@ -49,18 +49,9 @@ public class Menu {
     }
 
     private static void fileMenu(boolean encrypt) {
-        String return_to_main_menu_message = "\nPress ENTER to return to main menu...";
-
-        // clear leftover newline
-        skipLine();
-
         String file_name = getFileNameFromUser();
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
-
         process_file(file_name,key,encrypt);
-
-        System.out.println(return_to_main_menu_message);
-        skipLine();
     }
 
     private static String getFileNameFromUser() {
@@ -137,9 +128,5 @@ public class Menu {
         } catch (Exception e) {
             System.out.println(error_message + e.getMessage());
         }
-    }
-
-    private static void skipLine() {
-        user_input.nextLine();
     }
 }
