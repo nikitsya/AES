@@ -1,10 +1,19 @@
 import java.util.Scanner;
 
 
+/**
+ * Menu class manages the console-based interaction for encrypting and decrypting files.
+ * It handles user input, validates menu selections, and delegates actions to utility classes.
+ */
 public class Menu {
 
+    /** Global scanner for reading user input from console. */
     private static final Scanner user_input = new Scanner(System.in);
 
+    /**
+     * Entry point for the console menu.
+     * Loops until user chooses to exit and validates menu input.
+     */
     public static void start_program() {
         String write_number_message = "Write a number (1-3): ";
         String invalid_input_message = "\nInvalid input. Please try again.";
@@ -14,6 +23,8 @@ public class Menu {
             printMainMenu();
             try {
                 System.out.print(write_number_message);
+
+                // Read entire line to avoid issues with leftover newline characters
                 String line = user_input.nextLine().trim();
                 int choice = Integer.parseInt(line);
 
@@ -29,11 +40,15 @@ public class Menu {
                 }
 
             } catch (NumberFormatException e) {
+                // Handles cases where input is not a number (e.g., letters, empty input)
                 System.out.println(invalid_input_message);
             }
         }
     }
 
+    /**
+     * Prints the main menu layout.
+     */
     private static void printMainMenu() {
         System.out.println("""
             
@@ -48,12 +63,25 @@ public class Menu {
             """);
     }
 
+    /**
+     * Handles both encryption and decryption flow.
+     *
+     * @param encrypt true to encrypt a file, false to decrypt
+     */
     private static void fileMenu(boolean encrypt) {
         String file_name = getFileNameFromUser();
+
+        // Key is generated only for encryption; user enters key for decryption
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
+
         process_file(file_name,key,encrypt);
     }
 
+    /**
+     * Prompts the user to enter a file name, validates format and existence.
+     *
+     * @return valid file name ending with ".txt"
+     */
     private static String getFileNameFromUser() {
         String file_input_message = "\nEnter file name (format: filename.txt): ";
         String empty_file_name_message = """
@@ -74,18 +102,18 @@ public class Menu {
             System.out.print(file_input_message);
             file_name = user_input.nextLine().trim();
 
-            // check empty
+            // Reject empty input
             if (file_name.isEmpty()) {
                 System.out.println(empty_file_name_message);
                 continue;
             }
 
-            // add .txt if missing
+            // Automatically append .txt if user forgets it
             if (!file_name.endsWith(file_format)) {
                 file_name += file_format;
             }
 
-            // check existence
+            // Validate existence
             if (!FileUtils.checkFileExistence(file_name)) {
                 System.out.println(file_not_found_message);
                 continue;
@@ -96,6 +124,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Reads a Base64-encoded AES key from user input.
+     *
+     * @return decoded 16-byte AES key, or null if invalid
+     */
     private static byte[] getKeyFromUser() {
         String key_prompt = "\nEnter key: ";
 
@@ -105,10 +138,20 @@ public class Menu {
         return AESUtils.decodeBase64Key(key_string);
     }
 
+    /**
+     * Handles file encryption or decryption, including reading and writing the result.
+     *
+     * @param file_name name of the input file
+     * @param key AES key to use for encryption/decryption
+     * @param encrypt true for encryption, false for decryption
+     */
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
+
+        // If key is invalid, silently exit — error message handled elsewhere
         if (key == null) {
             return;
         }
+
         String plaintext_file_name = "plaintext.txt";
         String ciphertext_file_name = "ciphertext.txt";
 
@@ -116,15 +159,24 @@ public class Menu {
         String result_message = "Your result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
 
         try {
+            // Read file content
             String content = FileUtils.getFileContent(file_name);
+
+            // Determine output file and apply encryption/decryption
             String file_name_to_write = encrypt ? ciphertext_file_name : plaintext_file_name;
             String content_to_write = encrypt ? AESUtils.encryptAES(content, key) : AESUtils.decryptAES(content, key);
+
+            // Write processed file
             FileUtils.writeFile(file_name_to_write, content_to_write);
+
+            // Print key only when generating a new one during encryption
             if (encrypt) {
                 System.out.println(key_message + AESUtils.encodeKeyToBase64(key));
             }
+
             System.out.println(result_message);
         } catch (Exception ignored) {
+            // Error suppressed intentionally to prevent duplicate message output
         }
     }
 }
