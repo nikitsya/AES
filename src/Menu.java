@@ -112,7 +112,6 @@ public class Menu {
         String plaintext_file_name = "plaintext.txt";
         String ciphertext_file_name = "ciphertext.txt";
 
-        String error_message = "\nError while processing file: ";
         String key_message = "\nYour key (save to decrypt the file!): ";
         String result_message = "Your result will be saved here: " + (encrypt ? ciphertext_file_name : plaintext_file_name);
 
@@ -125,8 +124,7 @@ public class Menu {
                 System.out.println(key_message + AESUtils.encodeKeyToBase64(key));
             }
             System.out.println(result_message);
-        } catch (Exception e) {
-            System.out.println(error_message + e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 }
