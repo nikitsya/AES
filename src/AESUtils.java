@@ -123,7 +123,6 @@ public class AESUtils {
             return key;
 
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid Base64 key format.");
             return null;
         }
     }

@@ -71,8 +71,18 @@ public class Menu {
     private static void fileMenu(boolean encrypt) {
         String file_name = getFileNameFromUser();
 
+        if (file_name == null) {
+            // user pressed 0
+            return;
+        }
+
         // Key is generated only for encryption; user enters key for decryption
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
+
+        if (key == null) {
+            // also exit to main menu if user typed 0 in key input
+            return;
+        }
 
         process_file(file_name,key,encrypt);
     }
@@ -83,7 +93,7 @@ public class Menu {
      * @return valid file name ending with ".txt"
      */
     private static String getFileNameFromUser() {
-        String file_input_message = "\nEnter file name (format: filename.txt): ";
+        String file_input_message = "\nEnter file name (or '0' to return to Main Menu): ";
         String empty_file_name_message = """
             
             ---------------------------------------------
@@ -101,6 +111,11 @@ public class Menu {
         while (true) {
             System.out.print(file_input_message);
             file_name = user_input.nextLine().trim();
+
+            // Return to main menu
+            if (isExitToMainMenu(file_name)) {
+                return null;
+            }
 
             // Reject empty input
             if (file_name.isEmpty()) {
@@ -130,7 +145,7 @@ public class Menu {
      * @return decoded 16-byte AES key, or null if invalid
      */
     private static byte[] getKeyFromUser() {
-        String key_prompt = "\nEnter key: ";
+        String key_prompt = "\nEnter key (or '0' to return to Main Menu): ";
 
         System.out.print(key_prompt);
         String key_string = user_input.nextLine().trim();
@@ -149,6 +164,7 @@ public class Menu {
 
         // If key is invalid, silently exit — error message handled elsewhere
         if (key == null) {
+            System.out.println("Invalid Base64 key format.");
             return;
         }
 
@@ -178,5 +194,9 @@ public class Menu {
         } catch (Exception ignored) {
             // Error suppressed intentionally to prevent duplicate message output
         }
+    }
+
+    private static boolean isExitToMainMenu(String input) {
+        return input.equals("0");
     }
 }
