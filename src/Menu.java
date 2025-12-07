@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -79,7 +80,7 @@ public class Menu {
         // Key is generated only for encryption; user enters key for decryption
         byte[] key = encrypt ? AESUtils.generate16ByteRandomKey() : getKeyFromUser();
 
-        if (key == null) {
+        if (Arrays.equals(key, new byte[0])) {
             // also exit to main menu if user typed 0 in key input
             return;
         }
@@ -113,7 +114,7 @@ public class Menu {
             file_name = user_input.nextLine().trim();
 
             // Return to main menu
-            if (isExitToMainMenu(file_name)) {
+            if (file_name.equals("0")) {
                 return null;
             }
 
@@ -150,6 +151,10 @@ public class Menu {
         System.out.print(key_prompt);
         String key_string = user_input.nextLine().trim();
 
+        if (key_string.equals("0")) {
+            return new byte[0];
+        }
+
         return AESUtils.decodeBase64Key(key_string);
     }
 
@@ -163,8 +168,7 @@ public class Menu {
     private static void process_file(String file_name, byte[] key, boolean encrypt) {
 
         // If key is invalid, silently exit — error message handled elsewhere
-        if (key == null) {
-            System.out.println("Invalid Base64 key format.");
+        if (key == null || Arrays.equals(key, new byte[0])) {
             return;
         }
 
@@ -194,9 +198,5 @@ public class Menu {
         } catch (Exception ignored) {
             // Error suppressed intentionally to prevent duplicate message output
         }
-    }
-
-    private static boolean isExitToMainMenu(String input) {
-        return input.equals("0");
     }
 }
